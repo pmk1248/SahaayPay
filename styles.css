@@ -1,0 +1,308 @@
+:root {
+    --midnight-navy: #0A192F;
+    --muted-teal: #4A90E2;
+    --warm-ivory: #FDFBF7;
+    --neutral-grey: #E0E0E0;
+    --text-dark: #1F2937;
+    --text-light: #6B7280;
+    
+    /* App Specific Colors */
+    --gpay-blue: #1A73E8;
+    --phonepe-purple: #5f259f;
+    --bhim-orange: #F26822;
+    --bhim-green: #319B42;
+    
+    --header-height: 75px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--warm-ivory);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.top-bar {
+    background-color: var(--midnight-navy);
+    color: var(--warm-ivory);
+    height: var(--header-height);
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.lang-selector {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.lang-btn {
+    background: transparent;
+    color: var(--warm-ivory);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn.active {
+    background: var(--muted-teal);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--muted-teal);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+.btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+/* Default Screen Style */
+.screen {
+    display: none;
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.screen.active {
+    display: block;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: var(--midnight-navy);
+}
+
+.app-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.app-card {
+    background: white;
+    border: 1px solid var(--neutral-grey);
+    padding: 2rem;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    border-radius: 12px;
+}
+
+.app-card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+}
+
+.app-card .icon {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+.gpay-icon { color: var(--gpay-blue); }
+.phonepe-icon { color: var(--phonepe-purple); }
+.bhim-icon { color: var(--bhim-orange); }
+
+.scam-card {
+    border: 2px solid #ffebee;
+    width: 220px;
+}
+.scam-card:hover { border-color: #ef9a9a; }
+
+.walkthrough-container {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* --- SCAM HELP LAYOUT --- */
+#scam-help-screen.active {
+    display: block;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - var(--header-height));
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    z-index: 500;
+    background: #fff;
+}
+.scam-split-layout { display: flex; flex-direction: row; width: 100%; height: 100%; }
+.scam-website-side { width: 60%; display: flex; flex-direction: column; background: #f8f9fa; border-right: 2px solid var(--neutral-grey); height: 100%; }
+.scam-website-side iframe { width: 100%; height: 100%; border: none; background: #ffffff; }
+.scam-guide-side { width: 40%; display: flex; flex-direction: column; align-items: center; height: 100%; overflow-y: auto; background: #ffffff; }
+#scam-help-screen.physical-split-active .scam-website-side { display: none !important; }
+#scam-help-screen.physical-split-active .scam-guide-side { width: 100% !important; }
+
+.sim-educational-note.scam-warning { background-color: #fce8e8; color: #c62828; border: 1px solid #f8bbd0; text-align: left; padding: 1.2rem; border-radius: 8px; margin-bottom: 2rem; font-size: 1rem; line-height: 1.4; }
+.btn-large { font-size: 1.25rem !important; padding: 1.25rem 2rem !important; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+@media (max-width: 1024px) {
+    .scam-split-layout { flex-direction: column; overflow-y: auto; }
+    .scam-website-side { height: 60vh; flex: none; width: 100%; border-right: none; border-bottom: 2px solid var(--neutral-grey); }
+    .scam-guide-side { width: 100%; height: auto; min-height: 100%; }
+}
+
+/* --- Form Field Resets --- */
+input[type="date"], input[type="time"], input[type="text"], input[type="number"], input[type="tel"], input[type="email"], select {
+    font-family: inherit;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    background: #fff;
+}
+input:focus, select:focus {
+    outline: 2px solid var(--muted-teal);
+    border-color: transparent;
+}
+.form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
+
+/* --- Phone Simulators --- */
+.phone-frame { width: 320px; height: 650px; background: #ffffff; border: 12px solid #0f172a; border-radius: 40px; position: relative; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.phone-content { width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; background-color: #f8f9fa; }
+.phone-content.shake { animation: shake 0.3s; }
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
+.instruction-panel { max-width: 400px; width: 100%; }
+h2 { font-size: 1.75rem; line-height: 1.4; color: var(--midnight-navy); margin-bottom: 2rem; }
+.navigation-buttons { display: flex; gap: 1rem; margin-bottom: 2rem; }
+.btn-nav { background-color: var(--midnight-navy); color: white; padding: 1rem 2rem; font-size: 1.1rem; flex: 1; }
+.btn-text { background: none; color: var(--text-light); text-decoration: underline; cursor: pointer; }
+
+/* --- Simulated App UI Styles --- */
+.sim-header { padding: 2rem 1rem 1rem; color: white; text-align: center; font-weight: 600; font-size: 1.1rem; }
+.gpay-theme .sim-header { background: #ffffff; color: var(--text-dark); border-bottom: 1px solid #eee; }
+.phonepe-theme .sim-header { background: var(--phonepe-purple); }
+.bhim-theme .sim-header { background: var(--bhim-orange); }
+.sim-body { flex: 1; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 1rem; }
+.sim-box { background: white; padding: 1.25rem; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; }
+.sim-title { font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem; }
+.sim-amount { font-size: 2.5rem; font-weight: 600; color: var(--text-dark); }
+.sim-recipient { font-size: 1.1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 0.25rem; }
+.sim-clickable { cursor: pointer; position: relative; border: 2px solid transparent; transition: all 0.3s; }
+.sim-clickable.highlight { border-color: #e63946; border-radius: 8px; animation: pulse-border 1.5s infinite; }
+.sim-clickable.highlight::after { content: "Tap Here"; position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); background: #e63946; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; z-index: 10; }
+@keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); } 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); } }
+.sim-scanner { width: 200px; height: 200px; border: 2px dashed rgba(255,255,255,0.5); margin: 2rem auto; position: relative; }
+.sim-scanner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #00ff00; animation: scan 2s infinite; }
+@keyframes scan { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+.sim-pin-display { font-size: 2rem; letter-spacing: 12px; text-align: center; margin: 1.5rem 0; color: var(--midnight-navy); min-height: 40px; }
+.sim-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: auto; padding-bottom: 1rem; }
+.sim-key { background: #f1f3f4; padding: 15px; text-align: center; border-radius: 8px; font-weight: 500; cursor: pointer; user-select: none; transition: background 0.2s; }
+.sim-key:active { background: #d1d5db; }
+.sim-key-submit { background: #d1d5db; color: #9ca3af; transition: all 0.3s; }
+.sim-key-submit.active-submit { background: var(--muted-teal); color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.sim-pay-btn { background: var(--muted-teal); color: white; padding: 1rem; border-radius: 25px; text-align: center; font-weight: 600; margin-top: 1rem; }
+.sim-success { text-align: center; color: var(--bhim-green); margin-top: 3rem; }
+.sim-success-icon { font-size: 4rem; margin-bottom: 1rem; }
+.sim-educational-note { background: #FFF3CD; color: #856404; padding: 0.75rem; font-size: 0.8rem; border-radius: 8px; text-align: center; margin-bottom: 1rem; border: 1px solid #FFEEBA; }
+
+
+/* --- LOAN APPLICATION FORM CSS --- */
+.loan-form-container { background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--neutral-grey); max-width: 900px; margin: 0 auto; }
+.loan-section { border-top: 2px solid var(--neutral-grey); padding-top: 2rem; margin-top: 2rem; }
+.loan-section:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.loan-section-title { color: var(--midnight-navy); font-size: 1.4rem; margin-bottom: 1.5rem; }
+.loan-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.loan-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
+.loan-form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.loan-form-group label { font-weight: 600; margin-bottom: 0.4rem; color: var(--text-dark); font-size: 0.95rem; }
+
+@media (max-width: 768px) {
+    .loan-grid-2, .loan-grid-3 { grid-template-columns: 1fr; }
+}
+
+/* --- PRINTABLE A4 LOAN APPLICATION & EVIDENCE CSS --- */
+.printable-a4 { background: white; padding: 40px; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: 0 auto; max-width: 210mm; min-height: 297mm; display: block; }
+.print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+.print-header h2 { margin: 0; font-size: 24px; color: #000; }
+.print-header h3 { margin: 5px 0 0 0; font-size: 18px; color: #333; }
+.print-section { margin-bottom: 25px; }
+.print-section h4 { background: #f0f0f0; padding: 8px; margin: 0 0 10px 0; border: 1px solid #000; font-size: 14px; text-transform: uppercase; }
+.print-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.print-table td { padding: 8px; border: 1px solid #ddd; vertical-align: top; }
+.print-table td:nth-child(odd) { width: 20%; background-color: #fafafa; }
+.print-table td:nth-child(even) { width: 30%; }
+.print-checklist { list-style: none; padding: 0; }
+.print-checklist li { padding: 5px 0; border-bottom: 1px dashed #ccc; font-size: 14px; }
+.print-checklist li::before { content: "☐ "; font-size: 18px; margin-right: 5px; }
+.print-declaration { margin-top: 30px; font-size: 13px; text-align: justify; }
+
+@media print {
+    body * { visibility: hidden; }
+    
+    /* Safely allow printing either Evidence or Loan depending on which body class is active */
+    body.printing-evidence #evidence-display, 
+    body.printing-evidence #evidence-display * {
+        visibility: visible;
+    }
+    body.printing-evidence #evidence-display {
+        position: absolute; left: 0; top: 0; width: 100%; border: none !important; background: transparent !important;
+    }
+    
+    body.printing-loan #printable-loan-app, 
+    body.printing-loan #printable-loan-app * {
+        visibility: visible;
+    }
+    body.printing-loan #printable-loan-app {
+        position: absolute; left: 0; top: 0; width: 100%; max-width: none; border: none; box-shadow: none; padding: 0; margin: 0;
+    }
+    
+    .hide-on-print, #ev-reset-btn, #ev-print-btn, #main-header { display: none !important; }
+}

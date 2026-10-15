@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SahaayPay – Help Me Make a Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="top-bar" id="main-header">
+        <div class="logo">SahaayPay</div>
+        <div class="controls">
+            <div class="lang-selector">
+                <button class="lang-btn active" onclick="setLang('en')" id="btn-lang-en">English</button>
+                <button class="lang-btn" onclick="setLang('hi')" id="btn-lang-hi">हिंदी</button>
+                <button class="lang-btn" onclick="setLang('kn')" id="btn-lang-kn">ಕನ್ನಡ</button>
+            </div>
+            <button id="audioToggle" class="btn-primary">🔊 Listen</button>
+        </div>
+    </header>
+
+    <main id="app">
+        <!-- Screen 1: Home Selection -->
+        <section id="selection-screen" class="screen active">
+            <!-- Part A: Payment Apps -->
+            <h1 id="tagline">Select your payment app to learn</h1>
+            <div class="app-grid">
+                <button class="app-card" onclick="promptAppCheck('gpay')">
+                    <span class="icon gpay-icon">G</span>
+                    Google Pay
+                </button>
+                <button class="app-card" onclick="promptAppCheck('phonepe')">
+                    <span class="icon phonepe-icon">P</span>
+                    PhonePe
+                </button>
+                <button class="app-card" onclick="promptAppCheck('bhim')">
+                    <span class="icon bhim-icon">B</span>
+                    BHIM UPI
+                </button>
+            </div>
+
+            <!-- Part B: Scam Help Section -->
+            <div style="margin-top: 5rem; padding-top: 3rem; border-top: 2px solid var(--neutral-grey);">
+                <h1 id="scam-header" style="color: #d32f2f;">Have You Been Scammed? Get Help Here</h1>
+                <p id="scam-subheader" style="text-align: center; margin-bottom: 2rem; color: var(--text-light); max-width: 800px; margin-left: auto; margin-right: auto; font-size: 1.1rem;">
+                    Select an option below for simple step-by-step guidance on how to report fraud to the official authorities. We never ask for your PIN, OTP, or passwords.
+                </p>
+                <div class="app-grid" style="gap: 1.5rem; margin-bottom: 3rem;">
+                    <button class="app-card scam-card" onclick="openScamHelp('money')">
+                        <span class="icon" style="font-size: 3rem;">💸</span>
+                        <span id="scam-lbl-money">Money Stolen</span>
+                    </button>
+                    <button class="app-card scam-card" onclick="openScamHelp('call')">
+                        <span class="icon" style="font-size: 3rem;">📱</span>
+                        <span id="scam-lbl-call">Fraud Call or Message</span>
+                    </button>
+                    <button class="app-card scam-card" onclick="openScamHelp('fake')">
+                        <span class="icon" style="font-size: 3rem;">🌐</span>
+                        <span id="scam-lbl-fake">Fake Website or App</span>
+                    </button>
+                    <button class="app-card scam-card" onclick="openScamHelp('bank')">
+                        <span class="icon" style="font-size: 3rem;">🏦</span>
+                        <span id="scam-lbl-bank">Banking Complaint</span>
+                    </button>
+                    <button class="app-card scam-card" onclick="openScamHelp('invest')">
+                        <span class="icon" style="font-size: 3rem;">💰</span>
+                        <span id="scam-lbl-invest">Investment or Deposit Scam</span>
+                    </button>
+                </div>
+
+                <!-- Part C: Scam Evidence Portal Access -->
+                <div style="text-align: center; padding-top: 2rem; border-top: 1px dashed var(--neutral-grey);">
+                    <button class="btn-primary" onclick="openEvidencePortal()" style="font-size: 1.3rem; padding: 1.25rem 2.5rem; border-radius: 12px; background-color: var(--midnight-navy); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <span style="margin-right: 10px;">📝</span> <span id="ev-home-btn">Essential Scam Evidence Record</span>
+                    </button>
+                </div>
+                
+                <!-- NEW Part D: Loan Application Feature -->
+                <div style="text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px dashed var(--neutral-grey);">
+                    <h2 id="loan-home-title" style="color: var(--midnight-navy); margin-bottom: 1.5rem;">Need a Loan? Draft an Application</h2>
+                    <button class="btn-primary" onclick="openLoanSelection()" style="font-size: 1.3rem; padding: 1.25rem 2.5rem; border-radius: 12px; background-color: var(--bhim-orange); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <span style="margin-right: 10px;">📄</span> <span id="loan-home-btn">Start Loan Application Form</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 1.5 to 4: Simulator & Scam screens remain exactly as before -->
+        <section id="app-check-screen" class="screen">
+            <h1 id="check-title">Do you have this app installed?</h1>
+            <div class="app-grid">
+                <button class="app-card" onclick="hasApp(true)">
+                    <span class="icon">✅</span>
+                    <span id="btn-yes">Yes, open app</span>
+                </button>
+                <button class="app-card" onclick="hasApp(false)">
+                    <span class="icon">❌</span>
+                    <span id="btn-no">No, how to install?</span>
+                </button>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn-text" id="btn-skip-check" onclick="promptModeSelection()">Skip to Tutorial</button>
+            </div>
+        </section>
+
+        <section id="install-screen" class="screen">
+            <div class="walkthrough-container">
+                <div class="phone-frame">
+                    <div id="install-phone-content" class="phone-content" style="background: #ffffff;"></div>
+                </div>
+                <div class="instruction-panel">
+                    <h2 id="install-instruction">Step 1: Open Google Play Store</h2>
+                    <div class="navigation-buttons">
+                        <button class="btn-nav" id="btn-inst-back" onclick="prevInstallStep()">← Back</button>
+                        <button class="btn-nav" id="btn-inst-next" onclick="nextInstallStep()">Next →</button>
+                    </div>
+                    <button class="btn-primary" id="btn-inst-done" onclick="promptModeSelection()" style="display: none; font-size: 1.1rem; width: 100%;">Continue</button>
+                    <button class="btn-text" id="btn-inst-cancel" onclick="goHome()" style="display: block; margin-top: 1rem;">Cancel</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="mode-selection-screen" class="screen">
+            <h1 id="mode-title">How would you like to proceed?</h1>
+            <div class="app-grid">
+                <button class="app-card" onclick="startGuidedMode()">
+                    <span class="icon">📖</span>
+                    <span id="btn-mode-guided">Guided Tutorial</span>
+                </button>
+                <button class="app-card" onclick="startDirectPractice()">
+                    <span class="icon">🎯</span>
+                    <span id="btn-mode-practice">Direct Practice Mode</span>
+                </button>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn-text" id="btn-mode-cancel" onclick="goHome()">Cancel</button>
+            </div>
+        </section>
+
+        <section id="walkthrough-screen" class="screen">
+            <div class="walkthrough-container">
+                <div class="phone-frame">
+                    <div id="phone-content" class="phone-content"></div>
+                </div>
+                <div class="instruction-panel">
+                    <h2 id="instruction-text" aria-live="polite">Step instruction will appear here.</h2>
+                    <div class="navigation-buttons">
+                        <button class="btn-nav" id="btn-back" onclick="prevStep()">← Back</button>
+                        <button class="btn-nav" id="btn-next" onclick="nextStep()">Next →</button>
+                    </div>
+                    <button class="btn-text" id="btn-exit" onclick="goHome()">Exit to Home</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice-screen" class="screen">
+            <div class="walkthrough-container">
+                <div class="phone-frame">
+                    <div id="practice-phone-content" class="phone-content"></div>
+                </div>
+                <div class="instruction-panel">
+                    <h2 id="practice-title" style="color: #e63946;">Practice Mode</h2>
+                    <p id="practice-desc" style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5; color: var(--text-dark);">Try making a payment on your own. No hints!</p>
+                    <div class="navigation-buttons" style="flex-direction: column; gap: 1rem;">
+                        <button class="btn-primary" id="btn-practice-help" onclick="showPracticeHelp()" style="width: 100%; background: var(--midnight-navy);">Need Help?</button>
+                        <button class="btn-nav" id="btn-practice-exit" onclick="goHome()" style="width: 100%; background: transparent; color: var(--text-light); border: 1px solid var(--neutral-grey);">Exit Practice</button>
+                    </div>
+                    <div id="practice-help-text" style="margin-top: 15px; padding: 15px; background: #e0f2fe; color: #0369a1; border-radius: 8px; font-weight: 500; display: none; line-height: 1.4;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scam-help-screen" class="screen">
+            <div class="scam-split-layout">
+                <div class="scam-website-side">
+                    <iframe id="scam-iframe" src="" title="Official Government Portal"></iframe>
+                    <div id="scam-blocked-fallback" style="display:none; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding: 3rem; background: #f8f9fa;">
+                        <span style="font-size: 5rem; margin-bottom: 1rem; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));">🔒</span>
+                        <h2 style="font-size: 2.2rem; color: var(--midnight-navy); margin-bottom: 1rem;" id="scam-lock-title">Secure Official Website</h2>
+                        <p id="scam-lock-desc" style="font-size: 1.25rem; color: var(--text-dark); margin-bottom: 2.5rem; max-width: 500px; line-height: 1.5;">For your security, this official government website cannot be opened directly inside this panel.</p>
+                        <a id="scam-external-link" href="#" onclick="openPhysicalSplitWindows(event)" class="btn-primary" style="font-size: 1.25rem; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <span id="scam-lock-btn">Open Website (Split Screen) ↗</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="scam-guide-side">
+                    <div style="padding: 2rem; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+                        <div class="sim-educational-note scam-warning" style="width: 100%; max-width: 400px;">
+                            <strong id="scam-warning-title" style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem;">Safety Warning:</strong>
+                            <span id="scam-warning-text">Never share your UPI PIN, OTP, or passwords. Click 'Next' here after you complete the step on the official website.</span>
+                        </div>
+                        <div class="phone-frame" style="transform: scale(0.9); transform-origin: top center; margin-bottom: 0; flex-shrink: 0;">
+                            <div id="scam-visual-content" class="phone-content" style="background: #ffffff;"></div>
+                        </div>
+                        <div class="instruction-panel" style="width: 100%; max-width: 400px; text-align: center; margin-top: auto; padding-bottom: 1rem;">
+                            <h2 id="scam-instruction-text" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #1F2937;">Step instruction appears here.</h2>
+                            <div class="navigation-buttons" style="justify-content: center; gap: 1rem;">
+                                <button class="btn-nav btn-large" id="btn-scam-back" onclick="prevScamStep()">← Back</button>
+                                <button class="btn-nav btn-large" id="btn-scam-next" onclick="nextScamStep()">Next →</button>
+                            </div>
+                            <button class="btn-text" id="btn-scam-exit" onclick="goHome()" style="font-size: 1.1rem; padding: 0.75rem; margin-top: 0.5rem;">Exit to Home</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="evidence-screen" class="screen">
+            <h1 id="ev-title" style="margin-bottom: 1rem; color: var(--midnight-navy); font-size: 2.2rem;">Essential Scam Evidence Record</h1>
+            <div class="sim-educational-note" id="ev-privacy" style="margin-bottom: 2rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 1.1rem;">
+                Privacy Notice: Your details stay safely on this device. We do not save or upload anything to any server. Refreshing the page will clear this record.
+            </div>
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
+                <div style="flex: 1; min-width: 320px; max-width: 500px;">
+                    <div class="sim-box" style="text-align: left; margin-bottom: 2rem; padding: 2rem; border-top: 5px solid var(--muted-teal);">
+                        <h3 id="ev-sec1" style="color: var(--midnight-navy); margin-bottom: 1.25rem; font-size: 1.4rem;">1. What Evidence To Save</h3>
+                        <ul style="list-style: none; padding: 0; line-height: 1.8; color: var(--text-dark); font-size: 1.1rem;">
+                            <li id="ev-sec1a" style="margin-bottom: 15px;">📷 <strong>Take Screenshots:</strong> Capture scam messages, fake websites, or profiles immediately.</li>
+                            <li id="ev-sec1b" style="margin-bottom: 15px;">🧾 <strong>Save Receipts:</strong> Download UPI/Bank transaction receipts showing the UTR number.</li>
+                            <li id="ev-sec1c">📁 <strong>Keep Safe:</strong> Save everything in one easy-to-find folder on your phone.</li>
+                        </ul>
+                    </div>
+                    <div class="sim-box" style="text-align: left; padding: 2rem; border-top: 5px solid #d32f2f;">
+                        <h3 id="ev-sec3" style="color: var(--midnight-navy); margin-bottom: 1.25rem; font-size: 1.4rem;">3. What To Do Next</h3>
+                        <ul style="list-style: none; padding: 0; line-height: 1.8; color: var(--text-dark); font-size: 1.1rem;">
+                            <li id="ev-sec3a" style="margin-bottom: 15px;">📞 <strong>Call 1930</strong> immediately to report suspected financial fraud.</li>
+                            <li id="ev-sec3b" style="margin-bottom: 15px;">🌐 Visit <strong>cybercrime.gov.in</strong> to file an official report.</li>
+                            <li id="ev-sec3c" style="margin-bottom: 15px;">🏦 Contact your bank to block your account or card.</li>
+                            <li id="ev-sec3d" style="color: #d32f2f; font-weight: 700;">⚠️ Never share OTPs, UPI PINs, or passwords with anyone.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="flex: 1.2; min-width: 320px; max-width: 600px;">
+                    <div class="sim-box" style="text-align: left; padding: 2rem; border: 1px solid var(--neutral-grey); background: #ffffff; box-shadow: 0 8px 16px rgba(0,0,0,0.05);">
+                        <h3 id="ev-sec2" style="color: var(--midnight-navy); margin-bottom: 1.5rem; font-size: 1.4rem;">2. Record Important Details</h3>
+                        <form id="evidence-form" onsubmit="saveEvidence(event)">
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-date-lbl" for="ev-date" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Date of Incident</label>
+                                <input type="date" id="ev-date" required style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-time-lbl" for="ev-time" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Time of Incident</label>
+                                <input type="time" id="ev-time" style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-type-lbl" for="ev-type" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">How did the scam happen?</label>
+                                <select id="ev-type" required style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; background: #fff;">
+                                    <option value="" disabled selected id="ev-type-opt0">-- Select Option --</option>
+                                    <option value="Fraud Call or Message" id="ev-type-opt1">Fraud Call or Message</option>
+                                    <option value="Fake Website or App" id="ev-type-opt2">Fake Website or App</option>
+                                    <option value="Investment Scam" id="ev-type-opt3">Investment or Deposit Scam</option>
+                                    <option value="Other" id="ev-type-opt4">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-amount-lbl" for="ev-amount" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Amount Lost (₹)</label>
+                                <input type="number" id="ev-amount" min="0" placeholder="e.g. 5000" style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-txn-lbl" for="ev-txn" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Transaction ID / UTR Number</label>
+                                <input type="text" id="ev-txn" placeholder="Example: 312345678901" style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-scammer-lbl" for="ev-scammer" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Scammer Details</label>
+                                <input type="text" id="ev-scammer" placeholder="Example: Phone number, UPI ID, or Website link" style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label id="ev-ref-lbl" for="ev-ref" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Cybercrime/Bank Complaint Number</label>
+                                <input type="text" id="ev-ref" placeholder="If already reported" style="width:100%; padding:0.8rem; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 2rem;">
+                                <label id="ev-attach-lbl" for="ev-file" style="display:block; font-weight:600; margin-bottom:0.5rem; color:var(--text-dark);">Attach Evidence Files (Local only)</label>
+                                <input type="file" id="ev-file" multiple accept="image/*,.pdf" style="width:100%; padding:0.8rem; border:2px dashed #a1a1aa; border-radius:8px; font-size:1rem; background: #f4f4f5;">
+                            </div>
+                            <button type="submit" id="ev-save-btn" class="btn-primary" style="width:100%; font-size:1.3rem; padding: 1.2rem; border-radius: 12px; background: var(--bhim-green);">
+                                Save to Local Record
+                            </button>
+                        </form>
+                        <div id="evidence-display" style="display: none; margin-top: 1rem; padding: 1.5rem; border: 2px solid var(--bhim-green); border-radius: 12px; background: #f0fdf4;">
+                            <h3 id="ev-success-title" style="color: var(--bhim-green); margin-bottom: 1rem; font-size: 1.4rem;">✅ Record Saved Locally</h3>
+                            <div id="evidence-output" style="line-height: 1.8; font-size: 1.1rem; color: #1F2937;"></div>
+                            <button onclick="resetEvidenceForm()" class="btn-text" id="ev-reset-btn" style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--text-light); border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px;">Edit / Start Over</button>
+                            <button onclick="printEvidence()" class="btn-primary" id="ev-print-btn" style="margin-top: 1.5rem; margin-left: 1rem; font-size: 1.1rem; background: var(--midnight-navy);">🖨️ Print / Save PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn-text" id="ev-btn-exit" onclick="goHome()" style="font-size: 1.3rem; padding: 1rem 2rem; border: 2px solid var(--neutral-grey); border-radius: 12px;">Exit to Home</button>
+            </div>
+        </section>
+
+        <!-- NEW LOAN APPLICATION SCREENS -->
+        <!-- Step 1: Select Loan Category -->
+        <section id="loan-selection-screen" class="screen">
+            <h1 id="loan-select-title">Select Loan Category</h1>
+            <div class="app-grid">
+                <button class="app-card" onclick="openLoanForm('medical')">
+                    <span class="icon" style="font-size: 3rem; color: #e63946;">🏥</span>
+                    <h3>Medical Loan</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">For hospital bills and treatments.</p>
+                    <span class="btn-primary" style="margin-top: auto; width: 100%; font-size: 0.9rem;">Fill Application</span>
+                </button>
+                <button class="app-card" onclick="openLoanForm('gold')">
+                    <span class="icon" style="font-size: 3rem; color: #f59e0b;">💍</span>
+                    <h3>Gold Loan</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Secure a loan against gold jewelry.</p>
+                    <span class="btn-primary" style="margin-top: auto; width: 100%; font-size: 0.9rem;">Fill Application</span>
+                </button>
+                <button class="app-card" onclick="openLoanForm('agri')">
+                    <span class="icon" style="font-size: 3rem; color: var(--bhim-green);">🌾</span>
+                    <h3>Agricultural Loan</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">For farming, equipment & crops.</p>
+                    <span class="btn-primary" style="margin-top: auto; width: 100%; font-size: 0.9rem;">Fill Application</span>
+                </button>
+                <button class="app-card" onclick="openLoanForm('home')">
+                    <span class="icon" style="font-size: 3rem; color: var(--muted-teal);">🏠</span>
+                    <h3>Home Loan</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Purchase, build or renovate.</p>
+                    <span class="btn-primary" style="margin-top: auto; width: 100%; font-size: 0.9rem;">Fill Application</span>
+                </button>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn-text" onclick="goHome()" style="font-size: 1.1rem; padding: 1rem;">Back to Home</button>
+            </div>
+        </section>
+
+        <!-- Step 2 & 3: Loan Form Data Entry -->
+        <section id="loan-form-screen" class="screen">
+            <h1 id="loan-form-header" style="margin-bottom: 0.5rem;">Loan Application Form</h1>
+            <div class="sim-educational-note" style="margin-bottom: 2rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                Privacy Note: We do not store or transmit your data. All processing happens locally on your device for generating the printable form. Do not provide unnecessary sensitive numbers.
+            </div>
+
+            <form id="main-loan-form" onsubmit="submitLoanForm(event)" class="loan-form-container">
+                
+                <!-- STEP 2: SELECT BANK -->
+                <div class="loan-section">
+                    <h3 class="loan-section-title">Select Bank</h3>
+                    <div class="loan-form-group">
+                        <label for="loan-bank-select">Bank Name *</label>
+                        <select id="loan-bank-select" required onchange="toggleOtherBank()">
+                            <option value="" disabled selected>-- Select a Bank operating in India --</option>
+                            <option value="State Bank of India">State Bank of India</option>
+                            <option value="Punjab National Bank">Punjab National Bank</option>
+                            <option value="Bank of Baroda">Bank of Baroda</option>
+                            <option value="Canara Bank">Canara Bank</option>
+                            <option value="Union Bank of India">Union Bank of India</option>
+                            <option value="Bank of India">Bank of India</option>
+                            <option value="Indian Bank">Indian Bank</option>
+                            <option value="HDFC Bank">HDFC Bank</option>
+                            <option value="ICICI Bank">ICICI Bank</option>
+                            <option value="Other">Other Bank</option>
+                        </select>
+                    </div>
+                    <div class="loan-form-group" id="loan-bank-other-group" style="display: none;">
+                        <label for="loan-bank-other">Enter Bank Name *</label>
+                        <input type="text" id="loan-bank-other" placeholder="Full name of the bank">
+                    </div>
+                </div>
+
+                <!-- SECTION A: PERSONAL DETAILS -->
+                <div class="loan-section">
+                    <h3 class="loan-section-title">Section A: Personal Details</h3>
+                    <div class="loan-grid-2">
+                        <div class="loan-form-group">
+                            <label for="loan-name">Full Name *</label>
+                            <input type="text" id="loan-name" required placeholder="As per official documents">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-dob">Date of Birth *</label>
+                            <input type="date" id="loan-dob" required onchange="calculateAge()">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-age">Age</label>
+                            <input type="text" id="loan-age" readonly placeholder="Auto-calculated" style="background: #f3f4f6;">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-gender">Gender</label>
+                            <select id="loan-gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-mobile">Mobile Number *</label>
+                            <input type="tel" id="loan-mobile" required pattern="[0-9]{10}" placeholder="10-digit number">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-email">Email Address (Optional)</label>
+                            <input type="email" id="loan-email" placeholder="example@mail.com">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-marital">Marital Status</label>
+                            <select id="loan-marital">
+                                <option value="Single">Single</option>
+                                <option value="Married">Married</option>
+                                <option value="Widowed">Widowed</option>
+                                <option value="Divorced">Divorced</option>
+                            </select>
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-relative">Father's / Spouse's Name</label>
+                            <input type="text" id="loan-relative" placeholder="Name">
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1rem 0; font-size: 1.1rem;">Residential Address</h4>
+                    <div class="loan-form-group">
+                        <label for="loan-address">Full Address *</label>
+                        <input type="text" id="loan-address" required placeholder="House No, Street, Village/City">
+                    </div>
+                    <div class="loan-grid-3">
+                        <div class="loan-form-group">
+                            <label for="loan-state">State *</label>
+                            <select id="loan-state" required>
+                                <option value="">Select State</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Other">Other State</option>
+                            </select>
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-district">District *</label>
+                            <input type="text" id="loan-district" required placeholder="District Name">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-pin">PIN Code *</label>
+                            <input type="text" id="loan-pin" required pattern="[0-9]{6}" placeholder="6 digits">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION B: IDENTITY & ADDRESS DOCUMENTS -->
+                <div class="loan-section">
+                    <h3 class="loan-section-title">Section B: Identity & Address Documents</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Do not enter sensitive numbers here unnecessarily. Select the type of proof you will submit to the bank.</p>
+                    <div class="loan-grid-2">
+                        <div class="loan-form-group">
+                            <label for="loan-id-type">Identity Proof Type *</label>
+                            <select id="loan-id-type" required>
+                                <option value="">Select ID Proof</option>
+                                <option value="Aadhaar">Aadhaar</option>
+                                <option value="PAN">PAN</option>
+                                <option value="Voter ID">Voter ID</option>
+                                <option value="Passport">Passport</option>
+                                <option value="Driving Licence">Driving Licence</option>
+                                <option value="Other">Other Accepted Document</option>
+                            </select>
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-id-ref">ID Reference (Optional)</label>
+                            <input type="text" id="loan-id-ref" placeholder="Only if specifically required">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-address-type">Address Proof Type *</label>
+                            <select id="loan-address-type" required>
+                                <option value="Same as ID Proof">Same as ID Proof</option>
+                                <option value="Electricity Bill">Electricity Bill</option>
+                                <option value="Water Bill">Water Bill</option>
+                                <option value="Rental Agreement">Rental Agreement</option>
+                                <option value="Property Tax Receipt">Property Tax Receipt</option>
+                            </select>
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-acc-status">Existing Account with Selected Bank?</label>
+                            <select id="loan-acc-status">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes, I have an account</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION C: EMPLOYMENT & INCOME -->
+                <div class="loan-section">
+                    <h3 class="loan-section-title">Section C: Employment & Income</h3>
+                    <div class="loan-grid-2">
+                        <div class="loan-form-group">
+                            <label for="loan-emp-type">Employment Type *</label>
+                            <select id="loan-emp-type" required>
+                                <option value="">Select Type</option>
+                                <option value="Salaried">Salaried</option>
+                                <option value="Self-employed">Self-employed</option>
+                                <option value="Business Owner">Business Owner</option>
+                                <option value="Farmer">Farmer</option>
+                                <option value="Pensioner">Pensioner</option>
+                                <option value="Not Applicable">Not Applicable / Other</option>
+                            </select>
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-emp-name">Employer / Business Name</label>
+                            <input type="text" id="loan-emp-name" placeholder="If applicable">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-income-monthly">Monthly Income (₹) *</label>
+                            <input type="number" id="loan-income-monthly" required min="0" placeholder="0 if not applicable">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-income-annual">Annual Income (₹)</label>
+                            <input type="number" id="loan-income-annual" min="0" placeholder="Optional">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-existing-emi">Existing Loan EMIs (Monthly ₹)</label>
+                            <input type="number" id="loan-existing-emi" min="0" placeholder="0 if none">
+                        </div>
+                        <div class="loan-form-group">
+                            <label for="loan-coapp">Co-Applicant Available?</label>
+                            <select id="loan-coapp">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION D: DYNAMIC LOAN SPECIFIC DETAILS -->
+                <div class="loan-section" id="section-dynamic-d">
+                    <h3 class="loan-section-title">Section D: Loan Specific Details</h3>
+                    
+                    <!-- MEDICAL LOAN -->
+                    <div id="loan-spec-medical" class="dynamic-loan-spec" style="display:none;">
+                        <div class="loan-grid-2">
+                            <div class="loan-form-group">
+                                <label>Purpose of Medical Loan *</label>
+                                <select id="med-purpose" class="req-medical">
+                                    <option value="">Select Purpose</option>
+                                    <option value="Surgery">Surgery</option>
+                                    <option value="Hospitalization">Hospitalization</option>
+                                    <option value="Dental Treatment">Dental Treatment</option>
+                                    <option value="Specialized Therapy">Specialized Therapy</option>
+                                    <option value="Other Medical Expenses">Other Medical Expenses</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Hospital / Healthcare Provider Name *</label>
+                                <input type="text" id="med-hospital" class="req-medical" placeholder="Name of hospital">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Estimated Medical Expenses (₹) *</label>
+                                <input type="number" id="med-est-cost" class="req-medical" min="1">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Requested Loan Amount (₹) *</label>
+                                <input type="number" id="med-req-amount" class="req-medical" min="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GOLD LOAN -->
+                    <div id="loan-spec-gold" class="dynamic-loan-spec" style="display:none;">
+                        <div class="loan-grid-2">
+                            <div class="loan-form-group">
+                                <label>Purpose of Loan *</label>
+                                <select id="gold-purpose" class="req-gold">
+                                    <option value="">Select Purpose</option>
+                                    <option value="Agriculture">Agriculture</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Medical Emergency">Medical Emergency</option>
+                                    <option value="Personal Needs">Personal Needs</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Approximate Gold Quantity (in Grams) *</label>
+                                <input type="number" id="gold-qty" class="req-gold" min="1" placeholder="e.g. 50">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Gold Purity (if known)</label>
+                                <select id="gold-purity">
+                                    <option value="Unknown">Unknown</option>
+                                    <option value="18K">18K</option>
+                                    <option value="22K">22K</option>
+                                    <option value="24K">24K</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Type of Gold Ornaments</label>
+                                <input type="text" id="gold-type" placeholder="Chains, bangles, coins, etc.">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Estimated Gold Value (₹)</label>
+                                <input type="number" id="gold-est-value" min="0" placeholder="Optional">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Requested Loan Amount (₹) *</label>
+                                <input type="number" id="gold-req-amount" class="req-gold" min="1">
+                                <small style="color: #666; font-size: 0.8rem; margin-top: 4px; display: block;">Note: Final amount depends on bank appraisal.</small>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Existing Gold Loan Status</label>
+                                <select id="gold-existing">
+                                    <option value="None">No existing gold loans</option>
+                                    <option value="Active">Have active gold loans</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AGRICULTURAL LOAN -->
+                    <div id="loan-spec-agri" class="dynamic-loan-spec" style="display:none;">
+                        <div class="loan-grid-2">
+                            <div class="loan-form-group">
+                                <label>Type of Agricultural Activity *</label>
+                                <select id="agri-activity" class="req-agri" onchange="updateAgriFields()">
+                                    <option value="">Select Activity</option>
+                                    <option value="Crop Cultivation">Crop Cultivation</option>
+                                    <option value="Dairy / Poultry">Dairy / Poultry</option>
+                                    <option value="Farm Mechanization (Tractor/Equipment)">Farm Mechanization</option>
+                                    <option value="Irrigation">Irrigation / Borewell</option>
+                                    <option value="Other">Other Agri Allied Activities</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Land Ownership Status *</label>
+                                <select id="agri-land-status" class="req-agri">
+                                    <option value="">Select Status</option>
+                                    <option value="Owner">Owner</option>
+                                    <option value="Tenant / Lease">Tenant / Lease Farmer</option>
+                                    <option value="Sharecropper">Sharecropper</option>
+                                    <option value="Landless Laborer">Landless Laborer</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Land Area (Acres/Hectares)</label>
+                                <input type="text" id="agri-area" placeholder="e.g. 5 Acres">
+                            </div>
+                            <div class="loan-form-group" id="agri-crop-group">
+                                <label>Primary Crop / Activity Details</label>
+                                <input type="text" id="agri-crop" placeholder="Wheat, Rice, Cows, Tractors...">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Purpose of Loan *</label>
+                                <input type="text" id="agri-purpose" class="req-agri" placeholder="e.g. Buying seeds, buying tractor">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Requested Loan Amount (₹) *</label>
+                                <input type="number" id="agri-req-amount" class="req-agri" min="1">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Estimated Annual Agri Income (₹)</label>
+                                <input type="number" id="agri-est-income" min="0">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Relevant Govt. Scheme (if applying under one)</label>
+                                <select id="agri-scheme">
+                                    <option value="None">No Specific Scheme</option>
+                                    <option value="KCC">Kisan Credit Card (KCC)</option>
+                                    <option value="PM-KISAN related">PM-KISAN related</option>
+                                    <option value="MUDRA">MUDRA (Agri-allied)</option>
+                                    <option value="State Specific">State Specific Scheme</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HOME LOAN -->
+                    <div id="loan-spec-home" class="dynamic-loan-spec" style="display:none;">
+                        <div class="loan-grid-2">
+                            <div class="loan-form-group">
+                                <label>Purpose of Home Loan *</label>
+                                <select id="home-purpose" class="req-home">
+                                    <option value="">Select Purpose</option>
+                                    <option value="Purchase of New House">Purchase of New House / Flat</option>
+                                    <option value="Purchase of Resale Property">Purchase of Resale Property</option>
+                                    <option value="Construction of House">Construction of House</option>
+                                    <option value="Home Renovation">Home Renovation / Improvement</option>
+                                    <option value="Home Extension">Home Extension</option>
+                                    <option value="Balance Transfer">Balance Transfer from another bank</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Property Type</label>
+                                <select id="home-prop-type">
+                                    <option value="Apartment/Flat">Apartment/Flat</option>
+                                    <option value="Independent House">Independent House</option>
+                                    <option value="Plot/Land">Plot/Land for Construction</option>
+                                    <option value="Not yet finalized">Not yet finalized</option>
+                                </select>
+                            </div>
+                            <div class="loan-form-group" style="grid-column: span 2;">
+                                <label>Property Location (City/State)</label>
+                                <input type="text" id="home-loc" placeholder="Where is the property located?">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Estimated Property Value (₹) *</label>
+                                <input type="number" id="home-est-value" class="req-home" min="1">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Requested Loan Amount (₹) *</label>
+                                <input type="number" id="home-req-amount" class="req-home" min="1">
+                            </div>
+                            <div class="loan-form-group">
+                                <label>Preferred Repayment Period (Years) *</label>
+                                <select id="home-tenure" class="req-home">
+                                    <option value="">Select Years</option>
+                                    <option value="5">Up to 5 Years</option>
+                                    <option value="10">10 Years</option>
+                                    <option value="15">15 Years</option>
+                                    <option value="20">20 Years</option>
+                                    <option value="25">25 Years</option>
+                                    <option value="30">30 Years</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loan-error-msg" style="color: #d32f2f; margin-bottom: 1rem; font-weight: 500; display: none;">Please fill all required fields correctly.</div>
+
+                <div style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 2rem;">
+                    <button type="button" class="btn-text" onclick="goHome()" style="padding: 1rem; font-size: 1.1rem; border: 1px solid var(--neutral-grey); border-radius: 8px;">Cancel</button>
+                    <button type="submit" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.2rem; border-radius: 8px;">Review Application →</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Step 4, 5, 6: Loan Review, Checklist & Print Screen -->
+        <section id="loan-review-screen" class="screen">
+            <div class="review-controls hide-on-print">
+                <h1 style="margin-bottom: 1rem; color: var(--midnight-navy);">Review Your Application</h1>
+                <p style="text-align: center; margin-bottom: 2rem;">Please review the generated form and document checklist before printing.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <button class="btn-text" onclick="editLoanForm()" style="border: 1px solid #ccc; padding: 0.8rem 1.5rem; border-radius: 8px;">Edit Details</button>
+                    <button class="btn-primary" onclick="printLoanForm()" style="padding: 0.8rem 1.5rem; border-radius: 8px; background: var(--midnight-navy);">🖨️ Print Application</button>
+                    <button class="btn-primary" onclick="viewOfficialBankForms()" style="padding: 0.8rem 1.5rem; border-radius: 8px; background: var(--muted-teal);">🌐 View Official Bank Forms</button>
+                </div>
+            </div>
+
+            <!-- The Printable A4 Area -->
+            <div id="printable-loan-app" class="printable-a4">
+                <div class="print-header">
+                    <h2>LOAN APPLICATION FORM</h2>
+                    <h3 id="print-loan-type">Category: [Loan Type]</h3>
+                    <p><strong>Bank:</strong> <span id="print-bank-name"></span></p>
+                </div>
+
+                <div class="print-section">
+                    <h4>SECTION A: PERSONAL DETAILS</h4>
+                    <table class="print-table">
+                        <tr><td><strong>Applicant Name:</strong></td><td id="p-name"></td><td><strong>DOB / Age:</strong></td><td><span id="p-dob"></span> (<span id="p-age"></span> yrs)</td></tr>
+                        <tr><td><strong>Gender:</strong></td><td id="p-gender"></td><td><strong>Marital Status:</strong></td><td id="p-marital"></td></tr>
+                        <tr><td><strong>Father/Spouse:</strong></td><td id="p-relative"></td><td><strong>Mobile:</strong></td><td id="p-mobile"></td></tr>
+                        <tr><td><strong>Email:</strong></td><td id="p-email"></td><td><strong>Address:</strong></td><td id="p-address"></td></tr>
+                        <tr><td><strong>State:</strong></td><td id="p-state"></td><td><strong>District & PIN:</strong></td><td><span id="p-district"></span> - <span id="p-pin"></span></td></tr>
+                    </table>
+                </div>
+
+                <div class="print-section">
+                    <h4>SECTION B: IDENTITY & ADDRESS DOCUMENTS</h4>
+                    <table class="print-table">
+                        <tr><td><strong>ID Proof Type:</strong></td><td id="p-id-type"></td><td><strong>Address Proof:</strong></td><td id="p-addr-type"></td></tr>
+                        <tr><td><strong>ID Reference:</strong></td><td id="p-id-ref"></td><td><strong>Existing A/C:</strong></td><td id="p-acc-status"></td></tr>
+                    </table>
+                </div>
+
+                <div class="print-section">
+                    <h4>SECTION C: EMPLOYMENT & INCOME</h4>
+                    <table class="print-table">
+                        <tr><td><strong>Employment Type:</strong></td><td id="p-emp-type"></td><td><strong>Employer/Business:</strong></td><td id="p-emp-name"></td></tr>
+                        <tr><td><strong>Monthly Income:</strong></td><td>₹<span id="p-inc-month"></span></td><td><strong>Annual Income:</strong></td><td>₹<span id="p-inc-year"></span></td></tr>
+                        <tr><td><strong>Existing EMIs:</strong></td><td>₹<span id="p-emi"></span></td><td><strong>Co-Applicant:</strong></td><td id="p-coapp"></td></tr>
+                    </table>
+                </div>
+
+                <div class="print-section">
+                    <h4>SECTION D: LOAN SPECIFIC DETAILS</h4>
+                    <!-- Generated via JS based on loan type -->
+                    <table class="print-table" id="print-dynamic-d"></table>
+                </div>
+
+                <div class="print-section">
+                    <h4>SECTION E: DOCUMENT CHECKLIST (Please prepare these for the bank)</h4>
+                    <p style="font-size: 0.8rem; font-style: italic; margin-bottom: 8px;">Final document requirements depend on the selected bank and loan scheme.</p>
+                    <ul id="print-checklist" class="print-checklist">
+                        <!-- Generated dynamically -->
+                    </ul>
+                </div>
+
+                <div class="print-section print-declaration">
+                    <h4>DECLARATION</h4>
+                    <p>I hereby declare that all the particulars and information given in this application form are true, correct, and complete to the best of my knowledge and belief. I understand that this printed document serves as a draft application to be submitted to the respective bank for further processing subject to their official verification.</p>
+                    <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+                        <div>
+                            <p>Date: ____________________</p><br>
+                            <p>Place: ____________________</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p>_____________________________________</p>
+                            <p>Signature of Applicant</p>
+                        </div>
+                        <div style="text-align: center;" id="print-coapp-sig">
+                            <p>_____________________________________</p>
+                            <p>Signature of Co-Applicant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;" class="hide-on-print">
+                <button class="btn-text" onclick="goHome()" style="font-size: 1.1rem;">Exit to Home</button>
+            </div>
+        </section>
+
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
