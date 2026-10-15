@@ -1,8 +1,8 @@
-# SahaayPay – Help Me Make a Payment 🤝
+# SahaayPay – Help Me Make a Payment 
 
 SahaayPay is a privacy-first, highly accessible web application designed to help elderly and digitally illiterate users navigate the world of digital payments securely. It provides interactive, risk-free simulations of popular Indian payment apps, offers step-by-step guidance for reporting digital fraud, and simplifies the process of completing complex bank loan applications.
 
-## ✨ Key Features
+##  Key Features
 
 ### 1. Payment App Simulators & Tutorials
 * **Supported Apps:** Google Pay, PhonePe, and BHIM UPI.
@@ -29,12 +29,12 @@ Simplifies banking paperwork for users who struggle with complex forms.
 * **Simple Explanations:** Translates difficult banking terminology into easy-to-understand questions and instructions.
 * **Print-Ready Output:** The user answers simple prompts, and SahaayPay automatically generates a perfectly filled, fully formatted form. The user can simply print the document, sign it, and submit it directly to the bank. 
 
-## 🛠️ Technologies Used
+##  Technologies Used
 * **HTML5:** Semantic structure and native date/time pickers.
 * **CSS3:** Custom variables, responsive Flexbox/Grid layouts, and CSS animations for the simulators (no external CSS frameworks required).
 * **JavaScript (Vanilla ES6):** State management, DOM manipulation, multi-language dictionary mapping, Text-to-Speech API integration, and physical window resizing logic.
 
-## 🚀 How to Run Locally
+##  How to Run Locally
 Because SahaayPay is a pure front-end application with no backend dependencies, running it is incredibly simple:
 1. Clone the repository:
    ```bash
